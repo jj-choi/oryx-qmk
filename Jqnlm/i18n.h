@@ -1,0 +1,1 @@
+#define KR_HAEN KC_LANGUAGE_1
