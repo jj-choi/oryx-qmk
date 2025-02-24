@@ -325,3 +325,12 @@ tap_dance_action_t tap_dance_actions[] = {
         [DANCE_0] = ACTION_TAP_DANCE_TAP_HOLD(LGUI(KC_Z), LGUI(LSFT(KC_Z))),
         [DANCE_1] = ACTION_TAP_DANCE_TAP_HOLD(LGUI(KC_V), LGUI(LSFT(KC_V))),
 };
+
+// Custom QMK here
+const key_override_t delete_key_override = 
+    ko_make_basic(MOD_MASK_SHIFT, KC_BSPC, KC_DEL);
+
+const key_override_t **key_overrides = (const key_override_t *[]){
+	&delete_key_override,
+	NULL
+};
