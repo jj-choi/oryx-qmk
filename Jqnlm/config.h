@@ -3,9 +3,6 @@
   See config.h options at https://docs.qmk.fm/#/config_options?id=the-configh-file
 */
 
-#undef TAPPING_TERM
-#define TAPPING_TERM 180
-
 #define PERMISSIVE_HOLD
 
 #undef RGB_MATRIX_TIMEOUT
@@ -28,7 +25,7 @@
 #define MOUSEKEY_WHEEL_INTERVAL 101
 
 #define CAPS_LOCK_STATUS
-#define SERIAL_NUMBER "Jqnlm/x99G50"
+#define SERIAL_NUMBER "Jqnlm/VqqEmd"
 #define LAYER_STATE_16BIT
 #define COMBO_COUNT 8
 
