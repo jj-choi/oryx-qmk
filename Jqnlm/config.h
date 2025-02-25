@@ -28,7 +28,7 @@
 #define MOUSEKEY_WHEEL_INTERVAL 101
 
 #define CAPS_LOCK_STATUS
-#define SERIAL_NUMBER "Jqnlm/x99Gnx"
+#define SERIAL_NUMBER "Jqnlm/x99G50"
 #define LAYER_STATE_16BIT
 #define COMBO_COUNT 8
 
