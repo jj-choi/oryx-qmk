@@ -3,6 +3,22 @@
 #define MOON_LED_LEVEL LED_LEVEL
 #define ML_SAFE_RANGE SAFE_RANGE
 
+enum custom_smtd_keycodes {
+    SMTD_KEYCODES_BEGIN = SAFE_RANGE,
+    CKC_A, // reads as C(ustom) + KC_A, but you may give any name here
+    CKC_R,
+    CKC_S,
+    CKC_T,
+    CKC_N,
+    CKC_E,
+    CKC_I,
+    CKC_O,
+    SMTD_KEYCODES_END,
+};
+
+// custom
+#include "sm_td.h"
+
 enum custom_keycodes {
   RGB_SLD = ML_SAFE_RANGE,
   ST_MACRO_0,
@@ -35,7 +51,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_voyager(
     TO(8),          KC_MEDIA_STOP,  KC_MEDIA_PREV_TRACK,KC_MEDIA_PLAY_PAUSE,KC_MEDIA_NEXT_TRACK,KC_CAPS,                                        KC_PSCR,        KC_AUDIO_MUTE,  KC_AUDIO_VOL_DOWN,KC_AUDIO_VOL_UP,KC_BRIGHTNESS_DOWN,KC_BRIGHTNESS_UP,
     KC_NO,          CW_TOGG,        KC_W,           KC_F,           KC_P,           KC_G,                                           KC_J,           KC_L,           KC_U,           KC_Y,           KC_DELETE,      RGB_TOG,        
-    KC_Q,           MT(MOD_LGUI, KC_A),MT(MOD_LALT, KC_R),MT(MOD_LCTL, KC_S),MT(MOD_LSFT, KC_T),KC_D,                                           KC_H,           MT(MOD_RSFT, KC_N),MT(MOD_RCTL, KC_E),MT(MOD_LALT, KC_I),MT(MOD_LGUI, KC_O),KC_QUOTE,       
+    KC_Q,           CKC_A,CKC_R,CKC_S,CKC_T,KC_D,                                           KC_H,           CKC_N,CKC_E,CKC_I,CKC_O,KC_QUOTE,       
     TG(1),          KC_Z,           MEH_T(KC_X),    ALL_T(KC_C),    KC_V,           KC_B,                                           KC_K,           KC_M,           ALL_T(KC_COMMA),MEH_T(KC_DOT),  KC_SLASH,       KC_RIGHT_ALT,   
                                                     LT(2,KC_ENTER), LT(3,KC_ESCAPE),                                LT(5,KC_BSPC),  LT(4,KC_SPACE)
   ),
@@ -216,6 +232,9 @@ bool rgb_matrix_indicators_user(void) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  if (!process_smtd(keycode, record)) {
+    return false;
+  }
   switch (keycode) {
     case ST_MACRO_0:
     if (record->event.pressed) {
@@ -326,11 +345,32 @@ tap_dance_action_t tap_dance_actions[] = {
         [DANCE_1] = ACTION_TAP_DANCE_TAP_HOLD(LGUI(KC_V), LGUI(LSFT(KC_V))),
 };
 
-// Custom QMK here
-const key_override_t delete_key_override = 
-    ko_make_basic(MOD_MASK_SHIFT, KC_BSPC, KC_DEL);
+void on_smtd_action(uint16_t keycode, smtd_action action, uint8_t tap_count) {
+    switch (keycode) {
+        SMTD_MT(CKC_A, KC_A, KC_LEFT_GUI)   // A → Super (GUI)
+        SMTD_MT(CKC_O, KC_O, KC_LEFT_GUI)   // O → Super (GUI)
 
-const key_override_t **key_overrides = (const key_override_t *[]){
-	&delete_key_override,
-	NULL
-};
+        SMTD_MT(CKC_R, KC_R, KC_LEFT_ALT)   // R → Left Alt
+        SMTD_MT(CKC_I, KC_I, KC_LEFT_ALT)   // I → Left Alt
+
+        SMTD_MT(CKC_S, KC_S, KC_LEFT_CTRL)  // S → Left Ctrl
+        SMTD_MT(CKC_E, KC_E, KC_LEFT_CTRL)  // E → Left Ctrl
+
+        SMTD_MT(CKC_T, KC_T, KC_LSFT)       // T → Shift
+        SMTD_MT(CKC_N, KC_N, KC_LSFT)       // N → Shift
+    }
+}
+
+// Custom QMK here
+// bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+//     switch (keycode) {
+//         case TG_SUPER_SPACE:
+//             if (record->event.pressed) {
+//                 layer_invert(1);  // Toggle Layer 1
+//                 tap_code16(GUI(KC_SPC));  // Send Super + Space
+//             }
+//             return false; // Prevent further processing
+//     }
+//     return true;
+// }
+
